@@ -152,14 +152,14 @@ After Importing this library you just have to build the FileDialogManager throug
 
 # Screenshots
 ##### FileManager Dialog with root project color accent
-![alt text](https://github.com/sorbh/FileManagerDialog/raw/1.png) 
-![alt text](https://github.com/sorbh/FileManagerDialog/raw/2.png)
+![alt text](https://github.com/sorbh/FileManagerDialog/blob/master/raw/1.png) 
+![alt text](https://github.com/sorbh/FileManagerDialog/blob/master/raw/2.png)
 
 #### After Selecting File
-![alt text](https://github.com/sorbh/FileManagerDialog/raw/3.png)
+![alt text](https://github.com/sorbh/FileManagerDialog/blob/master/raw/3.png)
 
 #### After Selecting Folder
-![alt text](https://github.com/sorbh/FileManagerDialog/raw/4.png)
+![alt text](https://github.com/sorbh/FileManagerDialog/blob/master/raw/4.png)
 
 # Author
   * **Saurabh K Sharma - [GIT](https://github.com/Sorbh)**
