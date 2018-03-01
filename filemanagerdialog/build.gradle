@@ -27,3 +27,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:'+rootProject.supportLibraryVerion
     implementation 'com.android.support:recyclerview-v7:' + rootProject.supportLibraryVerion
 }
+
+
+apply from: 'deploy.gradle'
+

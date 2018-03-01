@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import in.unicodelabs.filemanagerdialog.interfaces.OnFileSelectListener;
+import in.unicodelabs.filemanagerdialog.interfaces.OnFolderSelectListener;
 import in.unicodelabs.filemanagerdialog.utils.FileUtils;
 import in.unicodelabs.filemanagerdialog.utils.ThemeUtils;
 
@@ -36,28 +37,19 @@ public class FileRecycleViewAdapter extends RecyclerView.Adapter<FileRecycleView
     private List<File> data = new LinkedList<>();
 
 
-    private File defaultDir = Environment.getExternalStorageDirectory();
-    private File selectedFile = defaultDir;
-
-    private ArrayList<String> extensionFilter = new ArrayList<>();
-    private boolean showDirOnly = false;
-//        private FileManagerDialog.FILE_FILTER fileFilter = FileManagerDialog.FILE_FILTER.ALL_FILES;
-
     private Context context;
     private FileRecycleView listerView;
 
     private boolean unreadableDir;
     private int colorAccent = -1;
-    private OnFileSelectListener onFileSelectListener;
-
-    FileRecycleViewAdapter(File defaultDir, FileRecycleView view) {
-        this.defaultDir = defaultDir;
-        selectedFile = defaultDir;
-        this.context = view.getContext();
-        listerView = view;
-
-        colorAccent = ThemeUtils.resolveAccentColor(context);
-    }
+    private OnFileSelectListener fileSelectListener;
+    private OnFolderSelectListener folderSelectListener;
+    private ArrayList<String> extensionFilter = new ArrayList<>();
+    private boolean showDirOnly = false;
+    private boolean showHiddenFolder = false;
+    private boolean showCreateFolder = false;
+    private File defaultDir = Environment.getExternalStorageDirectory();
+    private File selectedFile = defaultDir;
 
     FileRecycleViewAdapter(FileRecycleView view) {
         this.context = view.getContext();
@@ -68,23 +60,6 @@ public class FileRecycleViewAdapter extends RecyclerView.Adapter<FileRecycleView
 
     void start() {
         fileLister(defaultDir);
-    }
-
-    void setDefaultDir(File dir) {
-        defaultDir = dir;
-    }
-
-    File getDefaultDir() {
-        return defaultDir;
-    }
-
-    ArrayList<String> getFileFilter() {
-        return extensionFilter;
-    }
-
-    void setFileFilter(ArrayList<String> extensionFilter) {
-        this.extensionFilter = extensionFilter;
-
     }
 
     private void fileLister(File dir) {
@@ -137,14 +112,25 @@ public class FileRecycleViewAdapter extends RecyclerView.Adapter<FileRecycleView
             File[] files = dir.listFiles(new FileFilter() {
                 @Override
                 public boolean accept(File file) {
-                    if (showDirOnly) {
+                    Log.d("FileManager",file.getAbsolutePath());
+                    //Check if file is hidden or not
+                    String fileName = file.getName();
+                    if (!isShowHiddenFolder() && fileName.startsWith(".")) {
+                        return false;
+                    }
+
+                    if (isShowDirOnly()) {
                         return file.isDirectory();
                     } else {
                         if (file.isDirectory()) {
                             return true;
                         } else {
-                            String ext = FileUtils.getExtension(file);
-                            return extensionFilter.contains(ext);
+                            if (!extensionFilter.isEmpty()) {
+                                String ext = FileUtils.getExtension(file);
+                                return extensionFilter.contains(ext);
+                            } else {
+                                return true;
+                            }
                         }
                     }
                 }
@@ -174,18 +160,20 @@ public class FileRecycleViewAdapter extends RecyclerView.Adapter<FileRecycleView
         }
         notifyDataSetChanged();
         listerView.scrollToPosition(0);
+
     }
 
     private void dirUp() {
         if (!unreadableDir) {
             data.add(0, selectedFile.getParentFile());
-            data.add(1, null);
+            if (isShowCreateFolder())
+                data.add(1, null);
         }
     }
 
     @Override
     public FileListHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new FileListHolder(View.inflate(getContext(), R.layout.item_file_lister, null));
+        return new FileListHolder(View.inflate(context, R.layout.item_file_lister, null));
     }
 
     @Override
@@ -222,19 +210,6 @@ public class FileRecycleViewAdapter extends RecyclerView.Adapter<FileRecycleView
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return data.size();
-    }
-
-    File getSelected() {
-        return selectedFile;
-    }
-
-    void goToDefault() {
-        fileLister(defaultDir);
-    }
-
     class FileListHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView name;
@@ -253,9 +228,9 @@ public class FileRecycleViewAdapter extends RecyclerView.Adapter<FileRecycleView
         @Override
         public void onClick(View v) {
             if (data.get(getPosition()) == null) {
-                View view = View.inflate(getContext(), R.layout.dialog_create_folder, null);
+                View view = View.inflate(context, R.layout.dialog_create_folder, null);
                 final AppCompatEditText editText = view.findViewById(R.id.edittext);
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                AlertDialog.Builder builder = new AlertDialog.Builder(context)
                         .setView(view)
                         .setTitle("Enter the folder name")
                         .setPositiveButton("Create", new DialogInterface.OnClickListener() {
@@ -271,11 +246,11 @@ public class FileRecycleViewAdapter extends RecyclerView.Adapter<FileRecycleView
                     public void onClick(View v) {
                         String name = editText.getText().toString();
                         if (TextUtils.isEmpty(name)) {
-                            Toast.makeText(getContext(), "Please enter a valid folder name", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Please enter a valid folder name", Toast.LENGTH_SHORT).show();
                         } else {
                             File file = new File(selectedFile, name);
                             if (file.exists()) {
-                                Toast.makeText(getContext(), "This folder already exists.\n Please provide another name for the folder", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "This folder already exists.\n Please provide another name for the folder", Toast.LENGTH_SHORT).show();
                             } else {
                                 dialog.dismiss();
                                 file.mkdirs();
@@ -290,29 +265,79 @@ public class FileRecycleViewAdapter extends RecyclerView.Adapter<FileRecycleView
                 Log.d("From FileLister", f.getAbsolutePath());
                 if (f.isDirectory()) {
                     fileLister(f);
+                    if (folderSelectListener != null)
+                        folderSelectListener.onFolderSelected(f, f.getAbsolutePath());
                 } else {
-                    if (onFileSelectListener != null)
-                        onFileSelectListener.onFileSelected(f, f.getAbsolutePath());
+                    if (fileSelectListener != null)
+                        fileSelectListener.onFileSelected(f, f.getAbsolutePath());
                 }
             }
         }
     }
 
-
-    private Context getContext() {
-        return context;
+    @Override
+    public int getItemCount() {
+        return data.size();
     }
 
     protected void showDirectoriesOnly(boolean showDirOnly) {
         this.showDirOnly = showDirOnly;
     }
 
-    /**
-     * Setting listener for selected file
-     *
-     * @param onFileSelectListener
-     */
     protected void setOnFileSelectListener(OnFileSelectListener onFileSelectListener) {
-        this.onFileSelectListener = onFileSelectListener;
+        this.fileSelectListener = onFileSelectListener;
+    }
+
+    protected void setOnFolderSelectListener(OnFolderSelectListener onFolderSelectListener) {
+        this.folderSelectListener = onFolderSelectListener;
+    }
+
+    protected void goToDefault() {
+        fileLister(defaultDir);
+    }
+
+    protected File getSelectedFile() {
+        return selectedFile;
+    }
+
+    protected File getDefaultDir() {
+        return defaultDir;
+    }
+
+    protected void setDefaultDir(File defaultDir) {
+        this.selectedFile = defaultDir;
+        this.defaultDir = defaultDir;
+    }
+
+    protected ArrayList<String> getExtensionFilter() {
+        return extensionFilter;
+    }
+
+    protected void setExtensionFilter(ArrayList<String> extensionFilter) {
+        this.extensionFilter = extensionFilter;
+    }
+
+    public boolean isShowDirOnly() {
+        return showDirOnly;
+    }
+
+    public void setShowDirOnly(boolean showDirOnly) {
+        this.showDirOnly = showDirOnly;
+    }
+
+    public boolean isShowHiddenFolder() {
+        return showHiddenFolder;
+    }
+
+    public void setShowHiddenFolder(boolean showHiddenFolder) {
+        this.showHiddenFolder = showHiddenFolder;
+    }
+
+    public boolean isShowCreateFolder() {
+        return showCreateFolder;
+    }
+
+    public void setShowCreateFolder(boolean showCreateFolder) {
+        this.showCreateFolder = showCreateFolder;
     }
 }

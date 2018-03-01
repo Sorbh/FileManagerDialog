@@ -42,7 +42,9 @@ After Importing this library you just have to build the FileDialogManager throug
   This will return you instance of alert dialog manager,which you can dismiss on file selection or folder selection.
   
   
-
+# Author
+  * **Saurabh K Sharma - [GIT](https://github.com/Sorbh)**
+  
 
 # License
 
