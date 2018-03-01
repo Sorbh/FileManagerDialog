@@ -1,21 +1,21 @@
 package in.unicodelabs.filemanagerdemo;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import in.unicodelabs.filemanagerdialog.FileManagerDialogBuilder;
+import java.io.File;
+
+import in.unicodelabs.filemanagerdialog.FileManagerDialog;
+import in.unicodelabs.filemanagerdialog.enums.FILE_FILTER;
+import in.unicodelabs.filemanagerdialog.interfaces.OnFileSelectListener;
+import in.unicodelabs.filemanagerdialog.interfaces.OnFolderSelectListener;
 
 public class MainActivity extends AppCompatActivity {
     String TAG = MainActivity.class.getSimpleName();
@@ -38,7 +38,43 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new FileManagerDialogBuilder(context).show();
+
+                FileManagerDialog.Builder builder = new FileManagerDialog.Builder(context);
+//               builder.setTheme(themeResId);
+//                builder.setTitle(title);
+//                builder.setOnFileSelectListener(new OnFileSelectListener() {
+//                    @Override
+//                    public void onFileSelected(FileManagerDialog fileManagerDialog, File file, String path) {
+//                        //Your business logic here
+//                    }
+//                });
+//
+//                builder.setOnFolderSelectListener(new OnFolderSelectListener() {
+//                    @Override
+//                    public void onFolderSelected(FileManagerDialog fileManagerDialog, File folder, String path) {
+//                    //Your business logic here
+//                    }
+//                });
+//
+//                builder.setFileFilter(FILE_FILTER.ALL_FILES);
+//                builder.setFileFilter(FILE_FILTER.IMAGE_ONLY);
+//                builder.setFileFilter(FILE_FILTER.AUDIO_ONLY);
+//                builder.setFileFilter(FILE_FILTER.VIDEO_ONLY);
+//                builder.setFileFilter(FILE_FILTER.DOC_ONLY);
+//
+//                builder.showDirectoriesOnly(true);
+//
+//                builder.showHiddenFolder(true);
+//
+//                builder.showCreateFolder(true);
+//
+//                builder.setDefaultDir(file);
+//
+//                builder.setDefaultDir(folderPath);
+//
+//                FileManagerDialog fileManagerDialog = builder.create();
+
+                builder.show();
             }
         });
 

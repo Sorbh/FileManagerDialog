@@ -48,7 +48,7 @@ bintray {
 
     configurations = ['archives']
     pkg {
-        repo = "FileManagerDialogBuilder"
+        repo = "FileManagerDialog"
         name = artifact.id
         websiteUrl = artifact.siteUrl
         vcsUrl = artifact.gitUrl

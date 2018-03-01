@@ -266,10 +266,10 @@ public class FileRecycleViewAdapter extends RecyclerView.Adapter<FileRecycleView
                 if (f.isDirectory()) {
                     fileLister(f);
                     if (folderSelectListener != null)
-                        folderSelectListener.onFolderSelected(f, f.getAbsolutePath());
+                        folderSelectListener.onFolderSelected(null,f, f.getAbsolutePath());
                 } else {
                     if (fileSelectListener != null)
-                        fileSelectListener.onFileSelected(f, f.getAbsolutePath());
+                        fileSelectListener.onFileSelected(null,f, f.getAbsolutePath());
                 }
             }
         }

@@ -35,12 +35,106 @@ ext{
 
 After Importing this library you just have to build the FileDialogManager through builder pattern to list down all the file and folder and get callback for selected file/folder.
 
-  Get the simple basic FileDialog without any callback
+  Get the simple basic FileDialog without any callback with default setting
   ```
-  new FileManagerDialogBuilder(context).show();
+  FileManagerDialog.Builder builder =  new FileManagerDialog.Builder(context);
+  builder.show();
   ```
-  This will return you instance of alert dialog manager,which you can dismiss on file selection or folder selection.
+  This will return you instance of FileManager dialog,which you can dismiss on file selection or folder selection.
   
+  To add theme to dialog
+  ```
+  builder.setTheme(themeResId);
+  ```
+  
+  To add custom title to dialog box
+  ```
+  builder.setTitle(title);
+  ```
+  
+  To get callback on File Selection
+  ```
+  builder.setOnFileSelectListener(new OnFileSelectListener() {
+                      @Override
+                      public void onFileSelected(FileManagerDialog fileManagerDialog, File file, String path) {
+                          //Your business logic here
+                      }
+  }); 
+  ```
+  
+  To get callback on folder Selection
+  ```
+  builder.setOnFolderSelectListener(new OnFolderSelectListener() {
+                      @Override
+                      public void onFolderSelected(FileManagerDialog fileManagerDialog, File folder, String path) {
+                      //Your business logic here
+                      }
+  });
+  ```
+  
+  To set the file type to filter the files to be listed in FileManaget Dialog
+  ```
+   builder.setFileFilter(FILE_FILTER.ALL_FILES);
+  ```
+  
+  FILE_FILTER Enum have following possible values
+  ```
+  builder.setFileFilter(FILE_FILTER.ALL_FILES);
+  builder.setFileFilter(FILE_FILTER.IMAGE_ONLY);
+  builder.setFileFilter(FILE_FILTER.AUDIO_ONLY);
+  builder.setFileFilter(FILE_FILTER.VIDEO_ONLY);
+  builder.setFileFilter(FILE_FILTER.DOC_ONLY);
+  ```
+  
+  Even you set custom filter too, like you want to list only .doc file.
+  ```
+  builder.setFileFilter(".doc")
+  ```
+  or
+  ```
+  builder.setFileFilter("doc")
+  ```
+  
+  In case you want to show directory only in the list,by default this setting is false
+  ```
+  builder.showDirectoriesOnly(true);
+  ```
+  
+  In case you want to show hidden files and folder too, by default this setting is false
+  ```
+  builder.showHiddenFolder(true);
+  ```
+  
+  If you want to give user option to create new folder in FileManager Dialog, by default this setting is false
+  ```
+   builder.showCreateFolder(true);
+  ```
+  
+  If you want to change default directory, by default is sd card root.
+  ```
+   builder.setDefaultDir(file);
+  ```
+  or
+  ```
+  builder.setDefaultDir(folderPath);
+  ```
+  
+  finally after all these setting to get the FileManager dialog instance call create()
+  ```
+  FileManagerDialog fileManagerDialog = builder.create();
+  ```
+  
+  To show the dialog just call show() on builder or FileManager instance;
+  ```
+  builder.show();
+  ```
+  
+  or
+  ```
+  fileManagerDialog.show();
+  ```
+  
+###### FileManagerDialog class is extends AlertDialog, so all the alert dialog methods are available to this class.
   
 # Author
   * **Saurabh K Sharma - [GIT](https://github.com/Sorbh)**
