@@ -41,20 +41,22 @@ public class MainActivity extends AppCompatActivity {
 
                 FileManagerDialog.Builder builder = new FileManagerDialog.Builder(context);
 //               builder.setTheme(themeResId);
-//                builder.setTitle(title);
-//                builder.setOnFileSelectListener(new OnFileSelectListener() {
-//                    @Override
-//                    public void onFileSelected(FileManagerDialog fileManagerDialog, File file, String path) {
-//                        //Your business logic here
-//                    }
-//                });
-//
-//                builder.setOnFolderSelectListener(new OnFolderSelectListener() {
-//                    @Override
-//                    public void onFolderSelected(FileManagerDialog fileManagerDialog, File folder, String path) {
-//                    //Your business logic here
-//                    }
-//                });
+                builder.setTitle("File Manage Dialog");
+                builder.setOnFileSelectListener(new OnFileSelectListener() {
+                    @Override
+                    public void onFileSelected(FileManagerDialog fileManagerDialog, File file, String path) {
+                        //Your business logic here
+                        textView.setText(path);
+                    }
+                });
+
+                builder.setOnFolderSelectListener(new OnFolderSelectListener() {
+                    @Override
+                    public void onFolderSelected(FileManagerDialog fileManagerDialog, File folder, String path) {
+                        //Your business logic here
+                        textView.setText(path);
+                    }
+                });
 //
 //                builder.setFileFilter(FILE_FILTER.ALL_FILES);
 //                builder.setFileFilter(FILE_FILTER.IMAGE_ONLY);
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //                builder.showHiddenFolder(true);
 //
-//                builder.showCreateFolder(true);
+                builder.showCreateFolder(true);
 //
 //                builder.setDefaultDir(file);
 //

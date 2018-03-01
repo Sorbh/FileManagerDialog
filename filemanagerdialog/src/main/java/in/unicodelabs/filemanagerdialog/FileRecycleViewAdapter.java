@@ -112,7 +112,6 @@ public class FileRecycleViewAdapter extends RecyclerView.Adapter<FileRecycleView
             File[] files = dir.listFiles(new FileFilter() {
                 @Override
                 public boolean accept(File file) {
-                    Log.d("FileManager",file.getAbsolutePath());
                     //Check if file is hidden or not
                     String fileName = file.getName();
                     if (!isShowHiddenFolder() && fileName.startsWith(".")) {
@@ -139,6 +138,7 @@ public class FileRecycleViewAdapter extends RecyclerView.Adapter<FileRecycleView
                 fs = new LinkedList<>(Arrays.asList(files));
             }
         }
+
         data = new LinkedList<>(fs);
         Collections.sort(data, new Comparator<File>() {
             @Override
