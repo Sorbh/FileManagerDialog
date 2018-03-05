@@ -195,7 +195,7 @@ public class FileRecycleViewAdapter extends RecyclerView.Adapter<FileRecycleView
             }
         }
         if (position == 0 && f != null && !unreadableDir) {
-            holder.icon.setImageResource(R.drawable.ic_subdirectory_up_black_48dp);
+            holder.icon.setImageResource(R.drawable.ic_action_back);
         } else if (f != null) {
             if (f.isDirectory())
                 holder.icon.setImageResource(R.drawable.ic_folder_black_48dp);
