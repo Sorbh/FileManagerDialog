@@ -12,7 +12,7 @@ This library is posted in jCenter
 
 #### Gradle
 ```
-implementation 'in.unicodelabs.sorbh:FileManagerDialog:1.0.0'
+implementation 'in.unicodelabs.sorbh:FileManagerDialog:1.0.1'
 ```
 
 #### Maven
@@ -20,7 +20,7 @@ implementation 'in.unicodelabs.sorbh:FileManagerDialog:1.0.0'
 <dependency>
   <groupId>in.unicodelabs.sorbh</groupId>
   <artifactId>FileManagerDialog</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <type>pom</type>
 </dependency>
 ```
