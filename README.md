@@ -12,15 +12,15 @@ This library is posted in jCenter
 
 #### Gradle
 ```
-implementation 'in.unicodelabs.sorbh:FileManagerDialog:1.0.2'
+implementation 'in.unicodelabs.sorbh:filemanagerDialog:1.0.1'
 ```
 
 #### Maven
 ```
 <dependency>
   <groupId>in.unicodelabs.sorbh</groupId>
-  <artifactId>FileManagerDialog</artifactId>
-  <version>1.0.2</version>
+  <artifactId>filemanagerDialog</artifactId>
+  <version>1.0.1</version>
   <type>pom</type>
 </dependency>
 ```
